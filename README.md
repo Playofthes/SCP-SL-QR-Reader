@@ -1,6 +1,4 @@
 # SCP-SL-QR-Reader
-Tool for easy copying
-
 This tool can read the QR code from the Remote Admin menu and copy the ID of the User to the Clipboard.
 
 ## Detectable id types:
