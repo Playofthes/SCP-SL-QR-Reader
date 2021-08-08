@@ -11,7 +11,7 @@ This tool can read the QR code from the Remote Admin menu and copy the ID of the
 
 [string]@northwood
 ##
-If you find any buggs, please tell me in the issues section.
+If you find any bugs, please tell me in the issues section.
 
 ## Building:
 
