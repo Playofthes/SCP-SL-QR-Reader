@@ -52,8 +52,9 @@ public class Main{
 	public static String lasttext = "";
 	public static String lasttext2 = "";
 	static JTextField stid;
-	static JTextField stid2;
+	static JTextField stname;
 	private static String steam_key = "";
+	static String clipboardtext = "<id>@<type>";
 	static String configfile = "";
 	
 	public static void main(String[] args) {
@@ -88,9 +89,12 @@ public class Main{
 					String[] str2 = str.split(" : ");
 					//Test if it is empty or default
 					if(str2[0].equals("steamkey") && str2.length == 2 && !str2[1].equals("") && !str2[1].equals("ABCDEFGH")) {
-						
 						steam_key = str2[1];
 						System.out.println(steam_key);
+					}
+					if(str2[0].equals("clipboardtext") && str2.length == 2 && !str2[1].equals("")) {
+						clipboardtext = str2[1];
+						System.out.println(clipboardtext);
 					}
 				}
 			}
@@ -117,9 +121,9 @@ public class Main{
 			@Override
 			public void run() {
 				while(true) {
-					if(!stid.getText().equals(lasttext) || !stid2.getText().equals(lasttext2)) {
+					if(!stid.getText().equals(lasttext) || !stname.getText().equals(lasttext2)) {
 						stid.setText(lasttext);
-						stid2.setText(lasttext2);
+						stname.setText(lasttext2);
 					}
 					try {
 						Thread.sleep(50);
@@ -178,12 +182,10 @@ public class Main{
 								lasttext = text;
 								System.out.println("QR: " + text);
 								main.Playsound();
-								StringSelection selection = new StringSelection(text);
-								Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-								clipboard.setContents(selection, selection);
 								String name = main.getSteamName(l);
+								main.clipBoard(text.split("@")[0], "steam", name);
 								lasttext2 = name;
-								stid2.setText(name);
+								stname.setText(name);
 							//@discord
 							} else if(text.contains("@discord")) {
 								long l = Long.parseLong(text.split("@discord")[0]);
@@ -191,22 +193,18 @@ public class Main{
 								lasttext = text;
 								System.out.println("QR: " + text);
 								main.Playsound();
-								StringSelection selection = new StringSelection(text);
-								Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-								clipboard.setContents(selection, selection);
+								main.clipBoard(text.split("@")[0], "discord", "");
 								lasttext2 = "";
-								stid2.setText("");
+								stname.setText("");
 							//@northwood
 							} else if(text.contains("@northwood")) {
 								stid.setText(text);
 								lasttext = text;
 								System.out.println("QR: " + text);
 								main.Playsound();
-								StringSelection selection = new StringSelection(text);
-								Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-								clipboard.setContents(selection, selection);
+								main.clipBoard(text.split("@")[0], "northwood", text.split("@")[0]);
 								lasttext2 = text.split("@")[0];
-								stid2.setText(text.split("@")[0]);
+								stname.setText(text.split("@")[0]);
 							}
 						}
 						
@@ -247,7 +245,7 @@ public class Main{
 		
 		JLabel label2 = new JLabel("Name:");
 		
-		stid2 = new JTextField("");
+		stname = new JTextField("");
 		
 		//I'd be mad if you'd remove that :(
 		//The spacebars at the end are for formating reasons.
@@ -267,13 +265,14 @@ public class Main{
 		panel.add(stid);
 		if(steam_key != "") {
 			panel.add(label2);
-			panel.add(stid2);
+			panel.add(stname);
 		}
 		panel.add(author);
 		
 		frame.add(panel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setTitle("SCP reader beta");
+		//set the Title of the Windows
+		frame.setTitle("SCP reader v1.2.0");
 		
 		//I didn't wanted to ship the software with an extra picture file so i create the icon with code
 		// **Image stuff**
@@ -370,6 +369,9 @@ public class Main{
 			PrintWriter writer = new PrintWriter(configfile, "UTF-8");
 			writer.println("##steamkey can be found on https://steamcommunity.com/dev/apikey leave default or Empty to disable the name field.");
 			writer.println("steamkey : ABCDEFGH");
+			writer.println("##Define how the clipboard text should look like.");
+			writer.println("##<br> = new Line, <name> = name, <id> = id, <type> = type (<id>@<steam> = 12345@steam)");
+			writer.println("clipboardtext : <id>@<type>");
 			writer.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -379,6 +381,20 @@ public class Main{
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void clipBoard(String id, String type, String name) {
+		//copy the template
+		String text = clipboardtext;
+		//Replace spaceholders
+		text = text.replace("<id>", id);
+		text = text.replace("<type>", type);
+		text = text.replace("<name>", name);
+		text = text.replace("<br>", "\n");
+		//set the Clipboard
+		StringSelection selection = new StringSelection(text);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(selection, selection);
 	}
 
 }
