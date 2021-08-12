@@ -1,5 +1,8 @@
 # SCP-SL-QR-Reader
-Tool for easy copying<br>
+[![Price](https://img.shields.io/badge/price-FREE-0098f7.svg?colorB=brightgreen)](https://github.com/Playofthes/SCP-SL-QR-Reader/blob/master/LICENSE)
+[![Codesize](https://img.shields.io/github/languages/code-size/Playofthes/SCP-SL-QR-Reader?colorB=orange)](https://github.com/Playofthes/SCP-SL-QR-Reader/)
+[![Price](https://img.shields.io/github/v/release/Playofthes/SCP-SL-QR-Reader)](https://github.com/Playofthes/SCP-SL-QR-Reader/releases/latest)
+<br>
 This tool can read the QR code from the Remote Admin menu and copy the ID of the User to the Clipboard.
 
 ## Detectable id types:
